@@ -18,8 +18,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void createUsersTable() {
         Transaction transaction = null;
-        try {
-            Session session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
             session.createSQLQuery("CREATE TABLE IF NOT EXISTS test.user (Id BIGINT PRIMARY KEY NOT NULL  AUTO_INCREMENT," +
                     "name VARCHAR(30),lastname VARCHAR(30),age TINYINT").executeUpdate();
@@ -36,8 +35,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void dropUsersTable() {
         Transaction transaction = null;
-        try {
-            Session session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
             session.createSQLQuery("Drop table if exists test.table").executeUpdate();
             transaction.commit();
@@ -53,8 +51,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void saveUser(String name, String lastName, byte age) {
         Transaction transaction = null;
-        try {
-            Session session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
             transaction.commit();
@@ -70,8 +67,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void removeUserById(long id) {
         Transaction transaction = null;
-        try {
-            Session session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
             session.delete(session.get(User.class, id));
             transaction.commit();
@@ -88,8 +84,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
         Transaction transaction = null;
-        try {
-            Session session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
             list = session.createQuery(User.class.getSimpleName()).list();
             transaction.commit();
@@ -105,8 +100,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         Transaction transaction = null;
-        try {
-            Session session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
             List<User> users = getAllUsers();
             for (User user : users) session.delete(user);
